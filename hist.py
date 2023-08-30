@@ -50,8 +50,11 @@ for filename in files:
 avg = []
 median = []
 for data in chart:
-    avg.append(statistics.mean(data))
-    median.append(statistics.median(data))
+    a = statistics.mean(data)
+    m = statistics.median(data)
+    avg.append(a)
+    median.append(m)
+    print("avg: " + str(a) + " med: "+ str(m))
 
 
 # the histogram of the data
