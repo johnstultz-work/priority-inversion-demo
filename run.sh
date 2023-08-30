@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+setup_once() {
+	mkdir /sys/fs/cgroup/cpu
+	mount -t cgroup -o cpu none /sys/fs/cgroup/cpu
+}
+
 setup () {
 	mkdir a
 	mkdir b
@@ -91,7 +96,7 @@ if [ $EUID != 0 ]; then
 	echo "Please run with sudo"
 	exit
 fi
-
+setup_once
 
 # Capture the results of the test running alone
 echo "Running test alone..."
