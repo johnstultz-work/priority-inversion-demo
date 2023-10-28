@@ -14,7 +14,7 @@
 # limitations under the License.
 
 setup_once() {
-	mkdir /sys/fs/cgroup/cpu
+	mkdir -p /sys/fs/cgroup/cpu
 	mount -t cgroup -o cpu none /sys/fs/cgroup/cpu
 }
 
@@ -78,7 +78,7 @@ run_test () {
 	./rename-test -p ./a/foreground ./b/foreground > $OUT &
 	FOREGROUND_PID=$!
 
-	sleep 10
+	sleep 30
 
 	kill -9 $FOREGROUND_PID
 	if [ $BUSY == "true" ]; then
