@@ -106,5 +106,17 @@ if (len(files) > 1):
         label = "avg: " + "{:.2f}".format(avg[3]*mult) + unit +"\nmed: " + "{:.2f}".format(median[3]*mult) + unit
         ax3.text(x,y, label, transform=ax3.transAxes)
 
+    #There has to be a better way to fix the y-axis to be same on all charts
+    top=0
+    bottom=sys.float_info.max
+    for ax_tmp in fig.axes:
+        (low,high) = ax_tmp.get_ylim()
+        if (high > top):
+            top=high
+        if (low < bottom):
+            bottom = low
+    for ax_tmp in fig.axes:
+        ax_tmp.set_ylim(ymin=bottom,ymax=top)
+
     plt.savefig('chart-split.png', dpi=500)
 
