@@ -54,7 +54,7 @@ for data in chart:
     m = statistics.median(data)
     avg.append(a)
     median.append(m)
-    print("avg: " + str(a) + " med: "+ str(m))
+    print("avg: " + str(a) + "\tmed: "+ str(m) + "\tmax: "+str(max(data)))
 
 
 # the histogram of the data
