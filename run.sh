@@ -13,12 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+TEST_RUNNING=./TEST.RUNNING.DELME
+
 setup_once() {
 	mkdir -p /sys/fs/cgroup/cpu
 	mount -t cgroup -o cpu none /sys/fs/cgroup/cpu
 }
 
 setup () {
+	rm -f $TEST_RUNNING
+
 	mkdir a
 	mkdir b
 	touch ./a/foreground
@@ -39,25 +43,30 @@ cleanup () {
 	rmdir /sys/fs/cgroup/cpu/low
 }
 
-
 something() {
    VAL=5
 }
 
-busy () {
-	while true
+busy_cpu () {
+	while [ -f "$TEST_RUNNING" ];
 	do
-		something &
-		something &
-		something &
-		something &
+		for i in {1..10000}
+		do
+			something
+		done
 	done
-
 }
 
+busy () {
+	for i in `seq 1 $(($(nproc)*2))`;
+	do
+		busy_cpu &
+	done
+}
 
 run_test () {
 	setup
+	touch $TEST_RUNNING
 
 	if [ $BACKGROUND == "true" ]; then
 		./rename-test ./a/background ./b/background &
@@ -85,9 +94,7 @@ run_test () {
 	echo "I|$$|Test Finished" > /sys/kernel/tracing/trace_marker
 
 	kill -9 $FOREGROUND_PID
-	if [ $BUSY == "true" ]; then
-		kill -9 $BUSY_PID
-	fi
+	rm -f $TEST_RUNNING
 	if [ $BACKGROUND == "true" ]; then
 		kill -9 $BACKGROUND_PID
 	fi
