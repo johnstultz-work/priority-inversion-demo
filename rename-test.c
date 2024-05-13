@@ -22,6 +22,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <time.h>
+#include <sys/prctl.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -54,12 +55,14 @@ int main(int argc, char** argv)
 
 	/* TODO: better arg parsing */
 	if (!strncmp(argv[i], "-p", 2)) {
+		prctl(PR_SET_NAME, "foreground", 0, 0, 0);
 		display = true;
 		i++;
-	}
+	}else
+		prctl(PR_SET_NAME, "background", 0, 0, 0);
+
 	first = argv[i];
 	second = argv[i+1];
-
 
 	while(true){
 		struct timespec start, stop;
