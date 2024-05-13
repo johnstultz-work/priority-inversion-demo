@@ -78,7 +78,11 @@ run_test () {
 	./rename-test -p ./a/foreground ./b/foreground > $OUT &
 	FOREGROUND_PID=$!
 
+	echo "I|$$|Test Begins" > /sys/kernel/tracing/trace_marker
+
 	sleep 30
+
+	echo "I|$$|Test Finished" > /sys/kernel/tracing/trace_marker
 
 	kill -9 $FOREGROUND_PID
 	if [ $BUSY == "true" ]; then
