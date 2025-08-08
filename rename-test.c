@@ -32,6 +32,8 @@
 
 #define NUM_VALS 1024
 
+#define TEST_RUNNING_FILE "./TEST.RUNNING.DELME"
+
 #define NSEC_PER_SEC 1000000000ULL
 unsigned long long ts_to_ns(struct timespec ts)
 {
@@ -64,7 +66,7 @@ int main(int argc, char** argv)
 	first = argv[i];
 	second = argv[i+1];
 
-	while(true){
+	while(!access(TEST_RUNNING_FILE, F_OK)){
 		struct timespec start, stop;
 		unsigned long long diff;
 

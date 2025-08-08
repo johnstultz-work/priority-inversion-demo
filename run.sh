@@ -94,10 +94,10 @@ run_test () {
 	echo "I|$$|Test Finished" > /sys/kernel/tracing/trace_marker
 
 	kill -9 $FOREGROUND_PID
-	rm -f $TEST_RUNNING
 	if [ $BACKGROUND == "true" ]; then
 		kill -9 $BACKGROUND_PID
 	fi
+	rm -f $TEST_RUNNING
 
 	sort -n -o $OUT $OUT
 	cleanup
