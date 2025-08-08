@@ -13,11 +13,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 TEST_RUNNING=./TEST.RUNNING.DELME
 
+cleanup () {
+	set +e
+	rm -rf ./a
+	rm -rf ./b
+	rmdir /sys/fs/cgroup/medium
+	rmdir /sys/fs/cgroup/low
+	set -e
+}
+
 setup_once() {
-	mkdir -p /sys/fs/cgroup/cpu
-	mount -t cgroup -o cpu none /sys/fs/cgroup/cpu
+	if [ $EUID != 0 ]; then
+		echo "Please run with sudo"
+		exit
+	fi
+
+	VER=`stat -fc %T /sys/fs/cgroup/`
+	if [ ${VER} != "cgroup2fs" ] ; then
+		exit -1
+	fi
+
+	echo 1 > /sys/kernel/tracing/tracing_on
+
+	cleanup
 }
 
 setup () {
@@ -28,19 +50,12 @@ setup () {
 	touch ./a/foreground
 	touch ./a/background
 
-	mkdir /sys/fs/cgroup/cpu/medium
-	echo "512" > /sys/fs/cgroup/cpu/medium/cpu.shares
+	mkdir /sys/fs/cgroup/medium
+	echo "512" > /sys/fs/cgroup/medium/cpu.weight
 
-	mkdir /sys/fs/cgroup/cpu/low
-	echo "4" > /sys/fs/cgroup/cpu/low/cpu.shares
+	mkdir /sys/fs/cgroup/low
+	echo "4" > /sys/fs/cgroup/low/cpu.weight
 
-}
-
-cleanup () {
-	rm -rf ./a
-	rm -rf ./b
-	rmdir /sys/fs/cgroup/cpu/medium
-	rmdir /sys/fs/cgroup/cpu/low
 }
 
 something() {
@@ -72,14 +87,14 @@ run_test () {
 		./rename-test ./a/background ./b/background &
 		BACKGROUND_PID=$!
 		if [ $THROTTLED == "true" ]; then
-			echo $BACKGROUND_PID > /sys/fs/cgroup/cpu/low/cgroup.procs
+			echo $BACKGROUND_PID > /sys/fs/cgroup/low/cgroup.procs
 		fi
 	fi
 	if [ $BUSY == "true" ]; then
 		busy &
 		BUSY_PID=$!
 		if [ $THROTTLED == "true" ]; then
-			echo $BUSY_PID > /sys/fs/cgroup/cpu/medium/cgroup.procs
+			echo $BUSY_PID > /sys/fs/cgroup/medium/cgroup.procs
 		fi
 	fi
 
@@ -103,10 +118,6 @@ run_test () {
 	cleanup
 }
 
-if [ $EUID != 0 ]; then
-	echo "Please run with sudo"
-	exit
-fi
 setup_once
 
 # Capture the results of the test running alone
