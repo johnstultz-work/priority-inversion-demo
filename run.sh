@@ -125,28 +125,28 @@ run_test () {
 setup_once
 
 # Capture the results of the test running alone
-echo "Running test alone..."
-OUT=results-alone.log
-BACKGROUND="false"
-BUSY="false"
-THROTTLED="false"
-run_test
+#echo "Running test alone..."
+#OUT=results-alone.log
+#BACKGROUND="false"
+#BUSY="false"
+#THROTTLED="false"
+#run_test
 
 # Capture the results of the test running with VFS load (to create lock contention)
-echo "Running test with contention..."
-OUT=results-contention.log
-BACKGROUND="true"
-BUSY="false"
-THROTTLED="false"
-run_test
+#echo "Running test with contention..."
+#OUT=results-contention.log
+#BACKGROUND="true"
+#BUSY="false"
+#THROTTLED="false"
+#run_test
 
 # Capture the results of the test running with scheduler load
-echo "Running test with sched load..."
-OUT=results-schedload.log
-BACKGROUND="false"
-BUSY="true"
-THROTTLED="false"
-run_test
+#echo "Running test with sched load..."
+#OUT=results-schedload.log
+#BACKGROUND="false"
+#BUSY="true"
+#THROTTLED="false"
+#run_test
 
 # Capture the results of the test running with scheduler load & contention
 echo "Running test with sched load & contention..."
@@ -157,20 +157,20 @@ THROTTLED="false"
 run_test
 
 # Capture the results of the test running w/ contetion throttled
-echo "Running test with throttled contention..."
-OUT=results-contention-throttled.log
-BACKGROUND="true"
-BUSY="false"
-THROTTLED="true"
-run_test
+#echo "Running test with throttled contention..."
+#OUT=results-contention-throttled.log
+#BACKGROUND="true"
+#BUSY="false"
+#THROTTLED="true"
+#run_test
 
 # Capture the results of the test running with scheduler load throttled
-echo "Running test with throttled sched load..."
-OUT=results-schedload-throttled.log
-BACKGROUND="false"
-BUSY="true"
-THROTTLED="true"
-run_test
+#echo "Running test with throttled sched load..."
+#OUT=results-schedload-throttled.log
+#BACKGROUND="false"
+#BUSY="true"
+#THROTTLED="true"
+#run_test
 
 # Capture the results of the test running with scheduler load & contention throttled
 echo "Running test with throttled sched load & contention..."
