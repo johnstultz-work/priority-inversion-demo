@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright 2022 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,23 +17,25 @@ set -e
 
 TEST_RUNNING=./TEST.RUNNING.DELME
 
+CGRP_PATH=/sys/fs/cgroup
+
 cleanup () {
 	set +e
 	rm -rf ./a
 	rm -rf ./b
-	rmdir /sys/fs/cgroup/medium
-	rmdir /sys/fs/cgroup/low
+	rmdir $CGRP_PATH/medium
+	rmdir $CGRP_PATH/low
 	set -e
 }
 
 setup_once() {
-	if [ $EUID != 0 ]; then
+	if [ "${USER}" != "root" ]; then
 		echo "Please run with sudo"
 		exit
 	fi
 
-	VER=`stat -fc %T /sys/fs/cgroup/`
-	if [ ${VER} != "cgroup2fs" ] ; then
+	VER=`stat -fc %T $CGRP_PATH/`
+	if [ "${VER}" != "cgroup2fs" ] ; then
 		exit -1
 	fi
 
@@ -50,11 +52,11 @@ setup () {
 	touch ./a/foreground
 	touch ./a/background
 
-	mkdir /sys/fs/cgroup/medium
-	echo "512" > /sys/fs/cgroup/medium/cpu.weight
+	mkdir $CGRP_PATH/medium
+	echo "512" > $CGRP_PATH/medium/cpu.weight
 
-	mkdir /sys/fs/cgroup/low
-	echo "4" > /sys/fs/cgroup/low/cpu.weight
+	mkdir $CGRP_PATH/low
+	echo "4" > $CGRP_PATH/low/cpu.weight
 
 }
 
@@ -83,18 +85,18 @@ run_test () {
 	setup
 	touch $TEST_RUNNING
 
-	if [ $BACKGROUND == "true" ]; then
+	if [ "$BACKGROUND" = "true" ]; then
 		./rename-test ./a/background ./b/background &
 		BACKGROUND_PID=$!
-		if [ $THROTTLED == "true" ]; then
-			echo $BACKGROUND_PID > /sys/fs/cgroup/low/cgroup.procs
+		if [ "$THROTTLED" = "true" ]; then
+			echo $BACKGROUND_PID > $CGRP_PATH/low/cgroup.procs
 		fi
 	fi
-	if [ $BUSY == "true" ]; then
+	if [ "$BUSY" = "true" ]; then
 		busy &
 		BUSY_PID=$!
-		if [ $THROTTLED == "true" ]; then
-			echo $BUSY_PID > /sys/fs/cgroup/medium/cgroup.procs
+		if [ "$THROTTLED" = "true" ]; then
+			echo $BUSY_PID > $CGRP_PATH/medium/cgroup.procs
 		fi
 	fi
 
@@ -109,7 +111,7 @@ run_test () {
 	echo "I|$$|Test Finished" > /sys/kernel/tracing/trace_marker
 
 	kill -9 $FOREGROUND_PID
-	if [ $BACKGROUND == "true" ]; then
+	if [ "$BACKGROUND" = "true" ]; then
 		kill -9 $BACKGROUND_PID
 	fi
 	rm -f $TEST_RUNNING
