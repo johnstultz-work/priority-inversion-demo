@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import gzip
 
-matplotlib.rcParams.update({'font.family': 'Roboto'})
+matplotlib.rcParams.update({'font.family': 'Sans'})
 matplotlib.rcParams.update({'font.size': 6})
 
 
