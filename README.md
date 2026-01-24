@@ -1,4 +1,4 @@
-# prio-inversion-demo
+# priority-inversion-demo
 
 This project provides simple code to illustrate a priority inversion
 issue when using cpu cgroups
