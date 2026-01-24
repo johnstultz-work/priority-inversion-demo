@@ -20,10 +20,17 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+import gzip
 
 matplotlib.rcParams.update({'font.family': 'Roboto'})
 matplotlib.rcParams.update({'font.size': 6})
 
+
+def open_gz(filename, mode='r'):
+    if filename.endswith('.gz'):
+        return gzip.open(filename, mode)
+    else:
+        return open(filename, mode)
 
 allcolors = ["cornflowerblue","firebrick", "gold","forestgreen"]
 files = sys.argv
@@ -34,7 +41,7 @@ max_val = 0
 bins=50
 
 for filename in files:
-    datafile = open(filename,"r")
+    datafile = open_gz(filename,"r")
     data = []
     for line in datafile.readlines():
         line = line.strip()

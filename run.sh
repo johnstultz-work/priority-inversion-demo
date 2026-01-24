@@ -115,6 +115,8 @@ run_test () {
 	rm -f $TEST_RUNNING
 
 	sort -n -o $OUT $OUT
+	rm -f $OUT.gz
+	gzip $OUT
 	cleanup
 }
 
