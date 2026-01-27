@@ -40,7 +40,7 @@ unsigned long long ts_to_ns(struct timespec ts)
 	return ts.tv_sec * NSEC_PER_SEC + ts.tv_nsec;
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** argv)
 {
 	unsigned long long *delta_values;
 	int i = 1;
