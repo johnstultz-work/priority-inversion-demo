@@ -68,7 +68,6 @@ int main(int /*argc*/, char** argv)
 
 	while(!access(TEST_RUNNING_FILE, F_OK)){
 		struct timespec start, stop;
-		unsigned long long diff;
 
 		/* time rename */
 		clock_gettime(CLOCK_MONOTONIC, &start);
