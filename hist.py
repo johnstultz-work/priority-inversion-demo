@@ -84,8 +84,11 @@ if (len(files) > 1):
         plt.setp(axs[:], xlabel='msecs')
         plt.setp(axs[:], ylabel='count')
 
-    ax0.hist(chart[0], range=(0,max_val), bins=bins, log=True, color=colors[0], histtype='bar', rwidth=0.8, label=files[0])
-    ax0.set_title(files[0])
+    max_file_title=45
+
+    file_title = files[0][-max_file_title:]
+    ax0.hist(chart[0], range=(0,max_val), bins=bins, log=True, color=colors[0], histtype='bar', rwidth=0.8, label=file_title)
+    ax0.set_title(file_title)
 
     x = 0.75
     y = 0.8
@@ -97,19 +100,22 @@ if (len(files) > 1):
     label = "avg: " + "{:.2f}".format(avg[0]*mult) + unit +"\nmed: " + "{:.2f}".format(median[0]*mult) + unit
     ax0.text(x,y, label, transform=ax0.transAxes)
 
-    ax1.hist(chart[1], range=(0,max_val), bins=bins, log=True, color=colors[1], histtype='bar', rwidth=0.8, label=files[1])
-    ax1.set_title(files[1])
+    file_title = files[1][-max_file_title:]
+    ax1.hist(chart[1], range=(0,max_val), bins=bins, log=True, color=colors[1], histtype='bar', rwidth=0.8, label=file_title)
+    ax1.set_title(file_title)
     label = "avg: " + "{:.2f}".format(avg[1]*mult) + unit +"\nmed: " + "{:.2f}".format(median[1]*mult) + unit
     ax1.text(x,y, label, transform=ax1.transAxes)
 
     if (len(files) > 2):
-        ax2.hist(chart[2], range=(0,max_val), bins=bins, log=True, color=colors[2], histtype='bar', rwidth=0.8, label=files[2])
-        ax2.set_title(files[2])
+        file_title = files[2][-max_file_title:]
+        ax2.hist(chart[2], range=(0,max_val), bins=bins, log=True, color=colors[2], histtype='bar', rwidth=0.8, label=file_title)
+        ax2.set_title(file_title)
         label = "avg: " + "{:.2f}".format(avg[2]*mult) + unit +"\nmed: " + "{:.2f}".format(median[2]*mult) + unit
         ax2.text(x,y, label, transform=ax2.transAxes)
     if (len(files) > 3):
-        ax3.hist(chart[3], range=(0,max_val), bins=bins, log=True, color=colors[3], histtype='bar', rwidth=0.8, label=files[3])
-        ax3.set_title(files[3])
+        file_title = files[3][-max_file_title:]
+        ax3.hist(chart[3], range=(0,max_val), bins=bins, log=True, color=colors[3], histtype='bar', rwidth=0.8, label=file_title)
+        ax3.set_title(file_title)
         label = "avg: " + "{:.2f}".format(avg[3]*mult) + unit +"\nmed: " + "{:.2f}".format(median[3]*mult) + unit
         ax3.text(x,y, label, transform=ax3.transAxes)
 
